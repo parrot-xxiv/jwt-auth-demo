@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        <%= title %>
+    </title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+
+<body>
+    <h1>Welcome to <%= title %>
+    </h1>
+    <p>This is a simple EJS template.</p>
+    <form>
+        <input name="user" type="text" placeholder="user">
+        <button>Login</button>
+    </form>
+    <br>
+    <a href="/register-page">Register here</a>
+    <br>
+    <script>
+        const form = document.querySelector('form');
+
+        form.addEventListener('submit', (e) => {
+            e.preventDefault()
+            const formData = new FormData(e.target);
+            const username = formData.get('user');
+
+            fetch('/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ username })
+            })
+                .then(res => {
+                    if (res.ok) return res.json();
+                    else throw new Error(`HTTP error! Status: ${res.status}`);
+                })
+                .then(data => {
+                    alert(data.message);
+                    window.location = '/profile-page';
+                })
+                .catch(err => alert(err))
+        })
+
+    </script>
+</body>
+
+</html>
